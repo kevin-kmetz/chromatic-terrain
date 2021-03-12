@@ -22,7 +22,7 @@ public class ChromaticTerrainViewer {
 	private final int highestValue = 255;
 	private final int lowestValue = 0;
 	private final boolean utilizeStretch = true;
-	private final int maxColors = 256;
+	private final int maxColors = 255;
 
 	private int octaves;
 	private double persistence;
@@ -45,7 +45,7 @@ public class ChromaticTerrainViewer {
 
 		heightSeed = mainRandom.nextLong();
 		colorSeed = mainRandom.nextLong();
-		numberOfColors = mainRandom.nextInt(maxColors);
+		numberOfColors = mainRandom.nextInt(maxColors + 1);
 
 		octaves = mainRandom.nextInt(8) + 1;
 		persistence = mainRandom.nextDouble();
@@ -133,9 +133,11 @@ public class ChromaticTerrainViewer {
 					break;
 				case 's':
 					// regenerate the map, but only with a new terrain seed.
+					changeSeed();
 					break;
 				case 'l':
 					// regenerate the map, but only with a new lacunarity value.
+					changeLacunarity();
 					break;
 				case 'p':
 					// regenerate the map, but only with a new persistence value.
@@ -154,11 +156,11 @@ public class ChromaticTerrainViewer {
 
 	}
 
-	void generateNewImage() {
+	private void generateNewImage() {
 
 		heightSeed = mainRandom.nextLong();
 		colorSeed = mainRandom.nextLong();
-		numberOfColors = mainRandom.nextInt(maxColors);
+		numberOfColors = mainRandom.nextInt(maxColors + 1);
 
 		octaves = mainRandom.nextInt(8) + 1;
 		persistence = mainRandom.nextDouble();
@@ -175,7 +177,7 @@ public class ChromaticTerrainViewer {
 
 	}
 
-	void changePalette() {
+	private void changePalette() {
 
 		colorSeed = mainRandom.nextLong();
 		palette = getRandomHeightPalette(numberOfColors);
@@ -189,7 +191,7 @@ public class ChromaticTerrainViewer {
 
 	}
 
-	void changePaletteEntirely() {
+	private void changePaletteEntirely() {
 
 		colorSeed = mainRandom.nextLong();
 		heightSeed = mainRandom.nextLong();
@@ -205,9 +207,35 @@ public class ChromaticTerrainViewer {
 
 	}
 
-	void displayGradient() {
+	private void displayGradient() {
 
 		image = generator.getGradientImage();
+		Graphics graphic = canvas.getGraphics();
+		graphic.drawImage(image, 0, 0, null);
+		canvas.paint(graphic);
+
+	}
+
+	private void changeSeed() {
+
+		seed = mainRandom.nextLong();
+
+		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
+		generator.generateTerrain();
+		image = generator.getImage();
+		Graphics graphic = canvas.getGraphics();
+		graphic.drawImage(image, 0, 0, null);
+		canvas.paint(graphic);
+
+	}
+
+	private void changeLacunarity() {
+
+		lacunarity = mainRandom.nextDouble() * 3.0;
+
+		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
+		generator.generateTerrain();
+		image = generator.getImage();
 		Graphics graphic = canvas.getGraphics();
 		graphic.drawImage(image, 0, 0, null);
 		canvas.paint(graphic);
