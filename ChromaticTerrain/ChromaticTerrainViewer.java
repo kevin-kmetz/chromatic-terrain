@@ -10,7 +10,12 @@ public class ChromaticTerrainViewer {
 	private Frame frame = new Frame("Chromatic Terrain Viewer");
 	private ImageCanvas canvas = new ImageCanvas();
 
-	private Random random = new Random();
+	private Random mainRandom = new Random();
+	private Random colorRandom;
+	private Random heightRandom;
+
+	private long colorSeed;
+	private long heightSeed;
 
 	private final int xLength = 960;
 	private final int yLength = 640;
@@ -22,6 +27,7 @@ public class ChromaticTerrainViewer {
 	private double persistence;
 	private double lacunarity;
 	private long seed;
+	private int numberOfColors;
 
 
 	private TerrainGenerator generator;
@@ -36,10 +42,14 @@ public class ChromaticTerrainViewer {
 
 	ChromaticTerrainViewer() {
 
-		octaves = random.nextInt(8) + 1;
-		persistence = random.nextDouble();
-		lacunarity = random.nextDouble() * 3.0;
-		seed = random.nextLong();
+		heightSeed = mainRandom.nextLong();
+		colorSeed = mainRandom.nextLong();
+		numberOfColors = mainRandom.nextInt();
+
+		octaves = mainRandom.nextInt(8) + 1;
+		persistence = mainRandom.nextDouble();
+		lacunarity = mainRandom.nextDouble() * 3.0;
+		seed = mainRandom.nextLong();
 		palette = getRandomHeightPalette();
 
 		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
@@ -69,19 +79,22 @@ public class ChromaticTerrainViewer {
 
 	HeightPalette getRandomHeightPalette() {
 
-		return getRandomHeightPalette(random.nextInt(256));
+		return getRandomHeightPalette(mainRandom.nextInt(256));
 
 	}
 
 	HeightPalette getRandomHeightPalette(int numberOfColors) {
+
+		colorRandom = new Random(colorSeed);
+		heightRandom = new Random(heightSeed);
 
 		HeightPalette palette = new HeightPalette();
 		Color color;
 
 		for (int i = 0; i < numberOfColors; i++) {
 
-			color = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
-			palette.add(random.nextInt(256), color);
+			color = new Color(colorRandom.nextInt(256), colorRandom.nextInt(256), colorRandom.nextInt(256));
+			palette.add(heightRandom.nextInt(256), color);
 
 		}
 
@@ -102,8 +115,56 @@ public class ChromaticTerrainViewer {
 
 		public void keyPressed(KeyEvent event) {
 
+			char keyPressCharacter = event.getKeyChar();
+
+			switch (keyPressCharacter) {
+				case 'n':
+					// generate an entirely new image.
+					generateNewImage();
+					break;
+				case 'q':
+					// regenerate the map, but only with new colors.
+					break;
+				case 'e':
+					// regenerate the map, only with new colors and heights.
+					break;
+				case 's':
+					// regenerate the map, but only with a new terrain seed.
+					break;
+				case 'l':
+					// regenerate the map, but only with a new lacunarity value.
+					break;
+				case 'p':
+					// regenerate the map, but only with a new persistence value.
+					break;
+				case 'o':
+					// regenerate the map, but only with a number of octaves.
+					break;
+			}
+
 
 		}
+
+	}
+
+	void generateNewImage() {
+
+		heightSeed = mainRandom.nextLong();
+		colorSeed = mainRandom.nextLong();
+		numberOfColors = mainRandom.nextInt();
+
+		octaves = mainRandom.nextInt(8) + 1;
+		persistence = mainRandom.nextDouble();
+		lacunarity = mainRandom.nextDouble() * 3.0;
+		seed = mainRandom.nextLong();
+		palette = getRandomHeightPalette();
+
+		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
+		generator.generateTerrain();
+		image = generator.getImage();
+		Graphics graphic = canvas.getGraphics();
+		graphic.drawImage(image, 0, 0, null);
+		canvas.paint(graphic);
 
 	}
 
