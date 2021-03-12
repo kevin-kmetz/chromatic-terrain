@@ -129,6 +129,7 @@ public class ChromaticTerrainViewer {
 					break;
 				case 'e':
 					// regenerate the map, only with new colors and heights (new quantity as well).
+					changePaletteEntirely();
 					break;
 				case 's':
 					// regenerate the map, but only with a new terrain seed.
@@ -141,6 +142,10 @@ public class ChromaticTerrainViewer {
 					break;
 				case 'o':
 					// regenerate the map, but only with a number of octaves.
+					break;
+				case 'g':
+					// display gradient version of the map.
+					displayGradient();
 					break;
 			}
 
@@ -178,6 +183,31 @@ public class ChromaticTerrainViewer {
 		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
 		generator.generateTerrain();
 		image = generator.getImage();
+		Graphics graphic = canvas.getGraphics();
+		graphic.drawImage(image, 0, 0, null);
+		canvas.paint(graphic);
+
+	}
+
+	void changePaletteEntirely() {
+
+		colorSeed = mainRandom.nextLong();
+		heightSeed = mainRandom.nextLong();
+		numberOfColors = mainRandom.nextInt(maxColors);
+		palette = getRandomHeightPalette(numberOfColors);
+
+		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
+		generator.generateTerrain();
+		image = generator.getImage();
+		Graphics graphic = canvas.getGraphics();
+		graphic.drawImage(image, 0, 0, null);
+		canvas.paint(graphic);
+
+	}
+
+	void displayGradient() {
+
+		image = generator.getGradientImage();
 		Graphics graphic = canvas.getGraphics();
 		graphic.drawImage(image, 0, 0, null);
 		canvas.paint(graphic);

@@ -116,8 +116,6 @@ public class TerrainGenerator {
 
 		}
 
-		outputImage();
-
 	}
 
 	public void outputImage(String fileName) {
