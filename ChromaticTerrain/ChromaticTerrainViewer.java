@@ -30,10 +30,12 @@ public class ChromaticTerrainViewer {
 	private long seed;
 	private int numberOfColors;
 
-
 	private TerrainGenerator generator;
 	private HeightPalette palette;
 	private Image image;
+
+	private int imageCount = 0;
+	String fileNamePrefix;
 
 	public static void main(String[] args) {
 
@@ -42,6 +44,8 @@ public class ChromaticTerrainViewer {
 	}
 
 	ChromaticTerrainViewer() {
+
+		fileNamePrefix = String.valueOf((char)(mainRandom.nextInt(25)+97)) + String.valueOf((char)(mainRandom.nextInt(25)+97)) + String.valueOf((char)(mainRandom.nextInt(25)+97)) + String.valueOf('_');
 
 		heightSeed = mainRandom.nextLong();
 		colorSeed = mainRandom.nextLong();
@@ -141,13 +145,19 @@ public class ChromaticTerrainViewer {
 					break;
 				case 'p':
 					// regenerate the map, but only with a new persistence value.
+					changePersistence();
 					break;
 				case 'o':
 					// regenerate the map, but only with a number of octaves.
+					changeOctaves();
 					break;
 				case 'g':
 					// display gradient version of the map.
 					displayGradient();
+					break;
+				case 'z':
+					// save the current image to the hard drive.
+					outputImage();
 					break;
 			}
 
@@ -168,12 +178,7 @@ public class ChromaticTerrainViewer {
 		seed = mainRandom.nextLong();
 		palette = getRandomHeightPalette();
 
-		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
-		generator.generateTerrain();
-		image = generator.getImage();
-		Graphics graphic = canvas.getGraphics();
-		graphic.drawImage(image, 0, 0, null);
-		canvas.paint(graphic);
+		generate();
 
 	}
 
@@ -182,12 +187,7 @@ public class ChromaticTerrainViewer {
 		colorSeed = mainRandom.nextLong();
 		palette = getRandomHeightPalette(numberOfColors);
 
-		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
-		generator.generateTerrain();
-		image = generator.getImage();
-		Graphics graphic = canvas.getGraphics();
-		graphic.drawImage(image, 0, 0, null);
-		canvas.paint(graphic);
+		generate();
 
 	}
 
@@ -198,12 +198,7 @@ public class ChromaticTerrainViewer {
 		numberOfColors = mainRandom.nextInt(maxColors);
 		palette = getRandomHeightPalette(numberOfColors);
 
-		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
-		generator.generateTerrain();
-		image = generator.getImage();
-		Graphics graphic = canvas.getGraphics();
-		graphic.drawImage(image, 0, 0, null);
-		canvas.paint(graphic);
+		generate();
 
 	}
 
@@ -220,6 +215,36 @@ public class ChromaticTerrainViewer {
 
 		seed = mainRandom.nextLong();
 
+		generate();
+
+	}
+
+	private void changeLacunarity() {
+
+		lacunarity = mainRandom.nextDouble() * 3.0;
+
+		generate();
+
+	}
+
+	private void changeOctaves() {
+
+		octaves = mainRandom.nextInt(8) + 1;
+
+		generate();
+
+	}
+
+	private void changePersistence() {
+
+		persistence = mainRandom.nextDouble();
+
+		generate();
+
+	}
+
+	private void generate() {
+
 		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
 		generator.generateTerrain();
 		image = generator.getImage();
@@ -229,16 +254,10 @@ public class ChromaticTerrainViewer {
 
 	}
 
-	private void changeLacunarity() {
+	private void outputImage() {
 
-		lacunarity = mainRandom.nextDouble() * 3.0;
-
-		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
-		generator.generateTerrain();
-		image = generator.getImage();
-		Graphics graphic = canvas.getGraphics();
-		graphic.drawImage(image, 0, 0, null);
-		canvas.paint(graphic);
+		generator.outputImage(fileNamePrefix + String.format("%03d", imageCount) + ".png");
+		imageCount++;
 
 	}
 
