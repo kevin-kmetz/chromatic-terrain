@@ -35,7 +35,8 @@ public class ChromaticTerrainViewer {
 	private Image image;
 
 	private int imageCount = 0;
-	String fileNamePrefix;
+	private String fileNamePrefix;
+	private boolean gradientModeEnabled = false;
 
 	public static void main(String[] args) {
 
@@ -204,7 +205,20 @@ public class ChromaticTerrainViewer {
 
 	private void displayGradient() {
 
-		image = generator.getGradientImage();
+		if (gradientModeEnabled == false) {
+
+			gradientModeEnabled = true;
+
+			image = generator.getGradientImage();
+
+		} else if (gradientModeEnabled == true) {
+
+			gradientModeEnabled = false;
+
+			image = generator.getImage();
+
+		}
+
 		Graphics graphic = canvas.getGraphics();
 		graphic.drawImage(image, 0, 0, null);
 		canvas.paint(graphic);
@@ -247,7 +261,17 @@ public class ChromaticTerrainViewer {
 
 		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
 		generator.generateTerrain();
-		image = generator.getImage();
+
+		if (gradientModeEnabled == true) {
+
+			image = generator.getGradientImage();
+
+		} else if (gradientModeEnabled == false) {
+
+			image = generator.getImage();
+
+		}
+
 		Graphics graphic = canvas.getGraphics();
 		graphic.drawImage(image, 0, 0, null);
 		canvas.paint(graphic);
@@ -256,7 +280,17 @@ public class ChromaticTerrainViewer {
 
 	private void outputImage() {
 
-		generator.outputImage(fileNamePrefix + String.format("%03d", imageCount) + ".png");
+		if (gradientModeEnabled == true) {
+
+			generator.outputGradientImage(fileNamePrefix + String.format("%03d", imageCount) + ".png");
+
+
+		} else if (gradientModeEnabled == false) {
+
+			generator.outputImage(fileNamePrefix + String.format("%03d", imageCount) + ".png");
+
+		}
+
 		imageCount++;
 
 	}
