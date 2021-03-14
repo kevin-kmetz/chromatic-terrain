@@ -33,6 +33,7 @@ public class ChromaticTerrainViewer {
 	private TerrainGenerator generator;
 	private HeightPalette palette;
 	private Image image;
+	private Gradient gradient = new Gradient(0, 0, 0, 255, 255, 0);
 
 	private int imageCount = 0;
 	private String fileNamePrefix;
@@ -130,7 +131,16 @@ public class ChromaticTerrainViewer {
 					break;
 				case 'q':
 					// regenerate the map, but only with new colors (same quantity and height values).
-					changePalette();
+					if (gradientModeEnabled == false) {
+
+						changePalette();
+
+					} else if (gradientModeEnabled == true) {
+
+						changeGradientPalette();
+
+					}
+
 					break;
 				case 'e':
 					// regenerate the map, only with new colors and heights (new quantity as well).
@@ -159,6 +169,10 @@ public class ChromaticTerrainViewer {
 				case 'z':
 					// save the current image to the hard drive.
 					outputImage();
+					break;
+				case 'r':
+					// reset the gradient to high contrast black and yellow.
+					resetGradient();
 					break;
 			}
 
@@ -261,6 +275,7 @@ public class ChromaticTerrainViewer {
 
 		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
 		generator.generateTerrain();
+		generator.setGradient(gradient);
 
 		if (gradientModeEnabled == true) {
 
@@ -292,6 +307,24 @@ public class ChromaticTerrainViewer {
 		}
 
 		imageCount++;
+
+	}
+
+	private void changeGradientPalette() {
+
+		Color colorOne = new Color(mainRandom.nextInt(256), mainRandom.nextInt(256), mainRandom.nextInt(256));
+		Color colorTwo = new Color(mainRandom.nextInt(256), mainRandom.nextInt(256), mainRandom.nextInt(256));
+		gradient = new Gradient(colorOne, colorTwo);
+
+		generate();
+
+	}
+
+	private void resetGradient() {
+
+		gradient = new Gradient(0, 0, 0, 255, 255, 0);
+
+		generate();
 
 	}
 
