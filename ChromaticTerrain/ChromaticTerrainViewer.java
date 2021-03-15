@@ -131,6 +131,7 @@ public class ChromaticTerrainViewer {
 			switch (keyPressCharacter) {
 				case 'n':
 					// generate an entirely new image.
+					//updateStatusBar("Generating new image...");
 					generateNewImage();
 					updateStatusBar("New image generated.");
 					break;
@@ -139,7 +140,7 @@ public class ChromaticTerrainViewer {
 					if (gradientModeEnabled == false) {
 
 						changePalette();
-						updateStatusBar("New image palette generated; colors and heights preserved.");
+						updateStatusBar("New image palette generated; number of colors and height values preserved.");
 
 					} else if (gradientModeEnabled == true) {
 
@@ -152,23 +153,27 @@ public class ChromaticTerrainViewer {
 				case 'e':
 					// regenerate the map, only with new colors and heights (new quantity as well).
 					changePaletteEntirely();
+					updateStatusBar("New image palette generated; new number of colors and new height values generated.");
 					break;
 				case 's':
 					// regenerate the map, but only with a new terrain seed.
 					changeSeed();
-					updateStatusBar("Image regenerated with new seed. Seed: " + seed);
+					updateStatusBar("Image regenerated with new random seed. Seed: " + seed);
 					break;
 				case 'l':
 					// regenerate the map, but only with a new lacunarity value.
 					changeLacunarity();
+					updateStatusBar("Image regenerated with new random lacunarity value. Lacunarity: " + lacunarity);
 					break;
 				case 'p':
 					// regenerate the map, but only with a new persistence value.
 					changePersistence();
+					updateStatusBar("Image regenerated with new random persistence value. Persistence: " + persistence);
 					break;
 				case 'o':
 					// regenerate the map, but only with a number of octaves.
 					changeOctaves();
+					updateStatusBar("Image regenerated with new number of octaves. Number of octaves: " + octaves);
 					break;
 				case 'g':
 					// display gradient version of the map.
@@ -181,6 +186,7 @@ public class ChromaticTerrainViewer {
 				case 'r':
 					// reset the gradient to high contrast black and yellow.
 					resetGradient();
+					updateStatusBar("Gradient reset to original high-contrast values.");
 					break;
 			}
 
@@ -232,12 +238,14 @@ public class ChromaticTerrainViewer {
 			gradientModeEnabled = true;
 
 			image = generator.getGradientImage();
+			updateStatusBar("Gradient mode enabled.");
 
 		} else if (gradientModeEnabled == true) {
 
 			gradientModeEnabled = false;
 
 			image = generator.getImage();
+			updateStatusBar("Gradient mode disabled.");
 
 		}
 
@@ -281,6 +289,8 @@ public class ChromaticTerrainViewer {
 
 	private void generate() {
 
+		updateStatusBar("Generating...");
+
 		generator = new TerrainGenerator(xLength, yLength, highestValue, lowestValue, octaves, persistence, lacunarity, seed, utilizeStretch, palette);
 		generator.generateTerrain();
 		generator.setGradient(gradient);
@@ -299,18 +309,24 @@ public class ChromaticTerrainViewer {
 		graphic.drawImage(image, 0, 0, null);
 		canvas.paint(graphic);
 
+		updateStatusBar("Done!");
+
 	}
 
 	private void outputImage() {
 
+		String fileName = fileNamePrefix + String.format("%03d", imageCount) + ".png";
+
 		if (gradientModeEnabled == true) {
 
-			generator.outputGradientImage(fileNamePrefix + String.format("%03d", imageCount) + ".png");
+			generator.outputGradientImage(fileName);
+			updateStatusBar("Current gradient saved to hard drive as \'" + fileName + "\' in the working directory.");
 
 
 		} else if (gradientModeEnabled == false) {
 
-			generator.outputImage(fileNamePrefix + String.format("%03d", imageCount) + ".png");
+			generator.outputImage(fileName);
+			updateStatusBar("Current image saved to hard drive as \'" + fileName + "\' in the working directory.");
 
 		}
 
