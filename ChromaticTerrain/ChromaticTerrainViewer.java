@@ -9,6 +9,7 @@ public class ChromaticTerrainViewer {
 
 	private Frame frame = new Frame("Chromatic Terrain Viewer");
 	private ImageCanvas canvas = new ImageCanvas();
+	private Label statusBar = new Label("Program initialized.", Label.LEFT);
 
 	private Random mainRandom = new Random();
 	private Random colorRandom;
@@ -63,7 +64,7 @@ public class ChromaticTerrainViewer {
 		generator.generateTerrain();
 
 		frame.setLayout(null);		// use absolute layout
-		frame.setSize(960, 664);
+		frame.setSize(960, 666);
 		frame.setResizable(false);
 
 		// Enable the window to be closed by 'x'ing out.
@@ -77,8 +78,7 @@ public class ChromaticTerrainViewer {
 		frame.add(canvas);
 		frame.addKeyListener(new KeyListener());
 
-		Label statusBar = new Label("Status bar: ", Label.LEFT);
-		statusBar.setBounds(7, 642, 953, 10);
+		statusBar.setBounds(7, 642, 953, 14);
 		frame.add(statusBar);
 
 		frame.setVisible(true);
@@ -132,16 +132,19 @@ public class ChromaticTerrainViewer {
 				case 'n':
 					// generate an entirely new image.
 					generateNewImage();
+					updateStatusBar("New image generated.");
 					break;
 				case 'q':
 					// regenerate the map, but only with new colors (same quantity and height values).
 					if (gradientModeEnabled == false) {
 
 						changePalette();
+						updateStatusBar("New image palette generated; colors and heights preserved.");
 
 					} else if (gradientModeEnabled == true) {
 
 						changeGradientPalette();
+						updateStatusBar("New gradient generated.");
 
 					}
 
@@ -153,6 +156,7 @@ public class ChromaticTerrainViewer {
 				case 's':
 					// regenerate the map, but only with a new terrain seed.
 					changeSeed();
+					updateStatusBar("Image regenerated with new seed. Seed: " + seed);
 					break;
 				case 'l':
 					// regenerate the map, but only with a new lacunarity value.
@@ -329,6 +333,12 @@ public class ChromaticTerrainViewer {
 		gradient = new Gradient(0, 0, 0, 255, 255, 0);
 
 		generate();
+
+	}
+
+	private void updateStatusBar(String update) {
+
+		statusBar.setText(update);
 
 	}
 
