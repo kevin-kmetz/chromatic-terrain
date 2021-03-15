@@ -63,7 +63,7 @@ public class ChromaticTerrainViewer {
 		generator.generateTerrain();
 
 		frame.setLayout(null);		// use absolute layout
-		frame.setSize(960, 640);
+		frame.setSize(960, 664);
 		frame.setResizable(false);
 
 		// Enable the window to be closed by 'x'ing out.
@@ -76,6 +76,10 @@ public class ChromaticTerrainViewer {
 		canvas.setSize(960, 640);
 		frame.add(canvas);
 		frame.addKeyListener(new KeyListener());
+
+		Label statusBar = new Label("Status bar: ", Label.LEFT);
+		statusBar.setBounds(7, 642, 953, 10);
+		frame.add(statusBar);
 
 		frame.setVisible(true);
 
