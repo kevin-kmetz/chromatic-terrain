@@ -188,6 +188,10 @@ public class ChromaticTerrainViewer {
 					resetGradient();
 					updateStatusBar("Gradient reset to original high-contrast values.");
 					break;
+				case 'h':
+					// open a help window.
+					openHelpWindow();
+					break;
 			}
 
 
@@ -355,6 +359,24 @@ public class ChromaticTerrainViewer {
 	private void updateStatusBar(String update) {
 
 		statusBar.setText(update);
+
+	}
+
+	private void openHelpWindow() {
+
+		Frame helpWindow = new Frame("Chromatic Terrain Help");
+
+		helpWindow.setLayout(null);
+		helpWindow.setSize(300, 400);
+		helpWindow.setResizable(false);
+
+		/*helpWindow.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				helpWindow.dispose();
+			}
+		});*/
+
+		helpWindow.setVisible(true);
 
 	}
 
