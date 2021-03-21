@@ -97,6 +97,8 @@ public class ChromaticTerrainViewer {
 		statusBar.setBounds(7, 642, 953, 14);
 		frame.add(statusBar);
 
+		setHelpWindowText();
+
 		frame.setVisible(true);
 
 		image = generator.getImage();
@@ -392,5 +394,29 @@ public class ChromaticTerrainViewer {
 		
 
 	}
+
+	private void setHelpWindowText() {
+
+		Label helpLabel01 = new Label("Controls:", Label.LEFT);
+		helpLabel01.setBounds(10, 30, 300, 15);
+		helpWindow.add(helpLabel01);
+
+		Label helpLabel02 = new Label("N:   Generate new image.", Label.LEFT);
+		helpLabel02.setBounds(10, 60, 300, 15);
+		helpWindow.add(helpLabel02);
+
+		Label helpLabel03 = new Label("Q:   Randomize colors.", Label.LEFT);
+		helpLabel03.setBounds(10, 75, 300, 15);
+		helpWindow.add(helpLabel03);
+
+		Label helpLabel04 = new Label("E:   Randomize colors and number of colors.", Label.LEFT);
+		helpLabel04.setBounds(10, 90, 300, 15);
+		helpWindow.add(helpLabel04);
+
+
+	}
+
+	
+
 
 }
