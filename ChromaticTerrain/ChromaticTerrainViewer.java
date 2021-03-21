@@ -69,7 +69,7 @@ public class ChromaticTerrainViewer {
 		frame.setResizable(false);
 
 		helpWindow.setLayout(null);
-		helpWindow.setSize(300, 400);
+		helpWindow.setSize(300, 300);
 		helpWindow.setResizable(false);
 
 		helpWindow.addWindowListener(new WindowAdapter() {
@@ -405,7 +405,7 @@ public class ChromaticTerrainViewer {
 		helpLabel02.setBounds(10, 60, 300, 15);
 		helpWindow.add(helpLabel02);
 
-		Label helpLabel03 = new Label("Q:   Randomize colors.", Label.LEFT);
+		Label helpLabel03 = new Label("Q:   Randomize colors or gradient (gradient mode).", Label.LEFT);
 		helpLabel03.setBounds(10, 75, 300, 15);
 		helpWindow.add(helpLabel03);
 
@@ -413,6 +413,37 @@ public class ChromaticTerrainViewer {
 		helpLabel04.setBounds(10, 90, 300, 15);
 		helpWindow.add(helpLabel04);
 
+		Label helpLabel05 = new Label("S:   Randomize seed.", Label.LEFT);
+		helpLabel05.setBounds(10, 120, 300, 15);
+		helpWindow.add(helpLabel05);
+
+		Label helpLabel06 = new Label("L:   Randomize lacunarity.", Label.LEFT);
+		helpLabel06.setBounds(10, 135, 300, 15);
+		helpWindow.add(helpLabel06);
+
+		Label helpLabel07 = new Label("P:   Randomize persistence.", Label.LEFT);
+		helpLabel07.setBounds(10, 150, 300, 15);
+		helpWindow.add(helpLabel07);
+
+		Label helpLabel08 = new Label("O:   Randomize octaves.", Label.LEFT);
+		helpLabel08.setBounds(10, 165, 300, 15);
+		helpWindow.add(helpLabel08);
+
+		Label helpLabel09 = new Label("G:   Toggle gradient mode.", Label.LEFT);
+		helpLabel09.setBounds(10, 195, 300, 15);
+		helpWindow.add(helpLabel09);
+
+		Label helpLabel10 = new Label("R:   Reset gradient.", Label.LEFT);
+		helpLabel10.setBounds(10, 210, 300, 15);
+		helpWindow.add(helpLabel10);
+
+		Label helpLabel11 = new Label("H:   Toggle help window.", Label.LEFT);
+		helpLabel11.setBounds(10, 225, 300, 15);
+		helpWindow.add(helpLabel11);
+
+		Label helpLabel12 = new Label("Z:   Save image to hard drive.", Label.LEFT);
+		helpLabel12.setBounds(10, 240, 300, 15);
+		helpWindow.add(helpLabel12);
 
 	}
 
