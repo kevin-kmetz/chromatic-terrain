@@ -82,13 +82,17 @@ public class ChromaticTerrainViewer {
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				frame.dispose();
+				helpWindow.dispose();
 			}
 		});
 
 		canvas.setSize(960, 640);
 		frame.add(canvas);
-		frame.addKeyListener(new KeyListener());
-		canvas.addKeyListener(new KeyListener());
+
+		KeyListener keyListener = new KeyListener();
+		frame.addKeyListener(keyListener);
+		canvas.addKeyListener(keyListener);
+		helpWindow.addKeyListener(keyListener);
 
 		statusBar.setBounds(7, 642, 953, 14);
 		frame.add(statusBar);
@@ -376,7 +380,16 @@ public class ChromaticTerrainViewer {
 
 	private void openHelpWindow() {
 
-		helpWindow.setVisible(true);
+		if (!helpWindow.isVisible()) {
+
+			helpWindow.setVisible(true);
+
+		} else {
+
+			helpWindow.hide();
+
+		}
+		
 
 	}
 
