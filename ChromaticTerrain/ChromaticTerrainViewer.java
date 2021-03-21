@@ -10,6 +10,7 @@ public class ChromaticTerrainViewer {
 	private Frame frame = new Frame("Chromatic Terrain Viewer");
 	private ImageCanvas canvas = new ImageCanvas();
 	private Label statusBar = new Label("Program initialized.", Label.LEFT);
+	private Frame helpWindow = new Frame("Chromatic Terrain Help");
 
 	private Random mainRandom = new Random();
 	private Random colorRandom;
@@ -67,6 +68,16 @@ public class ChromaticTerrainViewer {
 		frame.setSize(960, 666);
 		frame.setResizable(false);
 
+		helpWindow.setLayout(null);
+		helpWindow.setSize(300, 400);
+		helpWindow.setResizable(false);
+
+		helpWindow.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				helpWindow.dispose();
+			}
+		});
+
 		// Enable the window to be closed by 'x'ing out.
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -77,6 +88,7 @@ public class ChromaticTerrainViewer {
 		canvas.setSize(960, 640);
 		frame.add(canvas);
 		frame.addKeyListener(new KeyListener());
+		canvas.addKeyListener(new KeyListener());
 
 		statusBar.setBounds(7, 642, 953, 14);
 		frame.add(statusBar);
@@ -363,18 +375,6 @@ public class ChromaticTerrainViewer {
 	}
 
 	private void openHelpWindow() {
-
-		Frame helpWindow = new Frame("Chromatic Terrain Help");
-
-		helpWindow.setLayout(null);
-		helpWindow.setSize(300, 400);
-		helpWindow.setResizable(false);
-
-		/*helpWindow.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				helpWindow.dispose();
-			}
-		});*/
 
 		helpWindow.setVisible(true);
 
